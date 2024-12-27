@@ -42,11 +42,14 @@ public class UserService {
 
     public void saveUser(User user) throws Exception {
         String userJson = objectMapper.writeValueAsString(user);
-        stringRedisTemplate.opsForValue().set("user:" + user.getId(), userJson);
+        stringRedisTemplate.opsForValue().set("user:" + user.getId(), userJson, 100, TimeUnit.SECONDS);
     }
 
     public User getUser(String userId) throws Exception {
         String userJson = stringRedisTemplate.opsForValue().get("user:" + userId);
+        if (userJson == null) {
+            throw new RuntimeException("User not found with id: " + userId);
+        }
         return objectMapper.readValue(userJson, User.class);
     }
 

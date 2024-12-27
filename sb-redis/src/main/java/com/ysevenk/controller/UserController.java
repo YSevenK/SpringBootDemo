@@ -13,21 +13,21 @@ public class UserController {
 
     // 保存用户
     @PostMapping
-    public String saveUser(@RequestBody User user) {
+    public String saveUser(@RequestBody User user) throws Exception {
         userService.saveUser(user);
         return "User saved successfully!";
     }
 
     // 获取用户
     @GetMapping("/{id}")
-    public User getUser(@PathVariable String id) {
-        return userService.getUserById(id);
+    public User getUser(@PathVariable String id) throws Exception {
+        return userService.getUser(id);
     }
 
     // 删除用户
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable String id) {
-        userService.deleteUserById(id);
+    public String deleteUser(@PathVariable String id) throws Exception {
+        userService.deleteUser(id);
         return "User deleted successfully!";
     }
 }

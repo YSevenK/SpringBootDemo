@@ -1,15 +1,17 @@
 package com.ysevenk.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ysevenk.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserService {
-    private static final String USER_KEY_PREFIX = "user:";
+    /*private static final String USER_KEY_PREFIX = "user:";
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -28,5 +30,28 @@ public class UserService {
     // 删除 Redis 中的用户信息
     public void deleteUserById(String id) {
         redisTemplate.delete(USER_KEY_PREFIX + id);
+    }*/
+
+    /**
+     * 写入时手动把对象序列化为json，读取时手动反序列化为对象
+     */
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public void saveUser(User user) throws Exception {
+        String userJson = objectMapper.writeValueAsString(user);
+        stringRedisTemplate.opsForValue().set("user:" + user.getId(), userJson);
+    }
+
+    public User getUser(String userId) throws Exception {
+        String userJson = stringRedisTemplate.opsForValue().get("user:" + userId);
+        return objectMapper.readValue(userJson, User.class);
+    }
+
+    public void deleteUser(String userId) throws Exception {
+        String key = "user:" + userId;
+        stringRedisTemplate.delete(key);
     }
 }

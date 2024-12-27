@@ -15,9 +15,9 @@ public class UserService {
     private RedisTemplate<String, Object> redisTemplate;
 
     // 保存用户信息到 Redis 中（支持链式编程）
-    // 设置了用户信息过期时间 10 单位 秒
+    // 设置了用户信息过期时间 100 单位 秒
     public void saveUser(User user) {
-        redisTemplate.opsForValue().set(USER_KEY_PREFIX + user.getId(), user, 10, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(USER_KEY_PREFIX + user.getId(), user, 100, TimeUnit.SECONDS);
     }
 
     // 从 Redis 中获取用户信息

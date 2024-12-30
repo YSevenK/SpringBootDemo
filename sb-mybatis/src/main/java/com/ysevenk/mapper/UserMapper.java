@@ -10,4 +10,7 @@ public interface UserMapper {
     // 查询所有用户
     List<Users> getAllUsers();
 
+    // 根据id查询用户
+    Users getUserById(int id);
+
 }

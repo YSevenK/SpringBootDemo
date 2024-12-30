@@ -16,5 +16,8 @@
     <select id="getAllUsers" resultMap="UserResultMap">
         select * from sb_demo.user;
     </select>
+    <select id="getUserById" resultMap="UserResultMap">
+        select * from sb_demo.user where id = #{id};
+    </select>
 
 </mapper>
